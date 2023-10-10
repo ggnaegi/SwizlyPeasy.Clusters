@@ -4,7 +4,6 @@ using Microsoft.Extensions.Hosting;
 using SwizlyPeasy.Clusters.Dtos;
 using SwizlyPeasy.Clusters.Providers;
 using SwizlyPeasy.Clusters.Services;
-using SwizlyPeasy.Common.Dtos;
 using Yarp.ReverseProxy.Configuration;
 
 namespace SwizlyPeasy.Clusters.Extensions;
@@ -19,7 +18,8 @@ public static class ReverseProxyBuilderExtensions
     /// <param name="builder"></param>
     /// <param name="configuration"></param>
     /// <returns></returns>
-    public static IReverseProxyBuilder LoadFromServiceDiscoveryProvider<T>(this IReverseProxyBuilder builder, IConfiguration configuration)
+    public static IReverseProxyBuilder LoadFromServiceDiscoveryProvider<T>(this IReverseProxyBuilder builder,
+        IConfiguration configuration)
         where T : class, IServiceDiscoveryProviderClient
     {
         builder.Services.Configure<SwizlyPeasyConfig>(configuration.GetSection(nameof(SwizlyPeasyConfig)));

@@ -1,0 +1,10 @@
+{
+  "profiles": {
+    "SwizlyPeasy.Clusters.Demo": {
+      "commandName": "Project"
+    },
+    "Docker": {
+      "commandName": "Docker"
+    }
+  }
+}
