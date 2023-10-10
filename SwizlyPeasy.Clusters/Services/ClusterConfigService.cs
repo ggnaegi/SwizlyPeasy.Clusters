@@ -25,7 +25,6 @@ public class ClusterConfigService : IClusterConfigService
             return new List<ClusterConfig>();
         }
 
-
         return (from currentCollection in destCollection
             select new ClusterConfig
             {
