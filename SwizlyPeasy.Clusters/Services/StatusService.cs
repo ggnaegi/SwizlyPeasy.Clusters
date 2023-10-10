@@ -56,10 +56,10 @@ public class StatusService : IStatusService
             return clusterStatus;
         }
 
-        foreach (var serviceId in cluster.Destinations.Keys)
+        foreach (var destinationId in cluster.Destinations.Keys)
         {
-            clusterStatus.Destinations.Add(await GetDestinationStatus(serviceId,
-                cluster.Destinations[serviceId].Address));
+            clusterStatus.Destinations.Add(await GetDestinationStatus(cluster.ClusterId, destinationId,
+                cluster.Destinations[destinationId].Address));
         }
 
         clusterStatus.Healthy = clusterStatus.Destinations.All(x => x.Healthy);
@@ -67,13 +67,13 @@ public class StatusService : IStatusService
         return clusterStatus;
     }
 
-    private async Task<DestinationStatusDto> GetDestinationStatus(string serviceId, string address)
+    private async Task<DestinationStatusDto> GetDestinationStatus(string clusterId, string destinationId, string address)
     {
-        var healthy = await _healthCheckService.IsServiceHealthy(serviceId);
+        var healthy = await _healthCheckService.IsDestinationHealthy(clusterId, destinationId);
 
         return new DestinationStatusDto
         {
-            Id = serviceId,
+            Id = destinationId,
             Address = address,
             Healthy = healthy
         };

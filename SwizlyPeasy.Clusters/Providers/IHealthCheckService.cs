@@ -6,7 +6,8 @@ public interface IHealthCheckService
     ///     Checking if service's destination is healthy
     ///     (checks are passing)
     /// </summary>
-    /// <param name="serviceId"></param>
+    /// <param name="clusterId"></param>
+    /// <param name="destinationId"></param>
     /// <returns></returns>
-    public Task<bool> IsServiceHealthy(string serviceId);
+    public Task<bool> IsDestinationHealthy(string clusterId, string destinationId);
 }
