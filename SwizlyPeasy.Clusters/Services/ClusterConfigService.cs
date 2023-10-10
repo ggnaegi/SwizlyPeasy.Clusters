@@ -1,37 +1,42 @@
-﻿using Microsoft.Extensions.Options;
-using SwizlyPeasy.Clusters.Providers;
-using SwizlyPeasy.Common.Dtos;
+﻿using SwizlyPeasy.Clusters.Providers;
 using Yarp.ReverseProxy.Configuration;
 
 namespace SwizlyPeasy.Clusters.Services;
 
 public class ClusterConfigService : IClusterConfigService
 {
-    private readonly IRetrieveDestinationsService _agentsService;
-    private readonly IOptions<ServiceDiscoveryConfig> _config;
+    private readonly IRetrieveDestinationsService _retrieveDestinationsService;
 
-    public ClusterConfigService(IRetrieveDestinationsService agentsService, IOptions<ServiceDiscoveryConfig> config)
+    public ClusterConfigService(IRetrieveDestinationsService retrieveDestinationsService)
     {
-        _agentsService = agentsService ?? throw new ArgumentNullException(nameof(agentsService));
-        _config = config ?? throw new ArgumentNullException(nameof(config));
+        _retrieveDestinationsService = retrieveDestinationsService ?? throw new ArgumentNullException(nameof(retrieveDestinationsService));
     }
 
+    /// <summary>
+    /// Retrieving cluster config data from service discovery provider
+    /// </summary>
+    /// <returns></returns>
     public async Task<List<ClusterConfig>> RetrieveClustersConfig()
     {
-        var agentsDic = await _agentsService.RetrieveDestinations();
+        var destCollection = await _retrieveDestinationsService.RetrieveDestinations();
 
-        if (!agentsDic.Any()) return new List<ClusterConfig>();
+        if (!destCollection.Any())
+        {
+            return new List<ClusterConfig>();
+        }
 
-        return agentsDic.Keys
-            .Select(serviceName => new ClusterConfig
+
+        return (from currentCollection in destCollection
+            select new ClusterConfig
             {
-                ClusterId = serviceName,
-                LoadBalancingPolicy = _config.Value.LoadBalancingPolicy,
-                Destinations = agentsDic[serviceName]
-                    .Select(x => (x.Id,
-                        new DestinationConfig { Address = $"{_config.Value.Scheme}://{x.Address}:{x.Port}" }))
+                ClusterId = currentCollection.ServiceName,
+                LoadBalancingPolicy = currentCollection.LoadBalancingPolicy,
+                Destinations = currentCollection.RegisteredDestinations
+                    .Select(x =>
+                        (x.Id,
+                            new DestinationConfig
+                                { Address = $"{currentCollection.HttpScheme}://{x.Address}:{x.Port}" }))
                     .ToDictionary(y => y.Id, y => y.Item2)
-            })
-            .ToList();
+            }).ToList();
     }
 }

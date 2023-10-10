@@ -29,8 +29,10 @@ public class RoutesConfigService : IRoutesConfigService
         var configDic = JsonConvert.DeserializeObject<Dictionary<string, object>>(configString);
 
         if (configDic == null || !configDic.ContainsKey("Routes"))
+        {
             throw new InternalDomainException("Please check the routes.config.json file, Routes key couldn't be found.",
                 null);
+        }
 
         var routesDic = JObject.FromObject(configDic["Routes"]).ToObject<Dictionary<string, RouteConfig>>();
 

@@ -30,9 +30,15 @@ public class StatusService : IStatusService
             Clusters = new List<ClusterStatusDto>()
         };
 
-        if (!clusterConfig.Any()) return status;
+        if (!clusterConfig.Any())
+        {
+            return status;
+        }
 
-        foreach (var cluster in clusterConfig) status.Clusters.Add(await GetClusterStatus(cluster));
+        foreach (var cluster in clusterConfig)
+        {
+            status.Clusters.Add(await GetClusterStatus(cluster));
+        }
 
         return status;
     }
@@ -45,11 +51,16 @@ public class StatusService : IStatusService
             Destinations = new List<DestinationStatusDto>()
         };
 
-        if (cluster.Destinations == null || !cluster.Destinations.Any()) return clusterStatus;
+        if (cluster.Destinations == null || !cluster.Destinations.Any())
+        {
+            return clusterStatus;
+        }
 
         foreach (var serviceId in cluster.Destinations.Keys)
+        {
             clusterStatus.Destinations.Add(await GetDestinationStatus(serviceId,
                 cluster.Destinations[serviceId].Address));
+        }
 
         clusterStatus.Healthy = clusterStatus.Destinations.All(x => x.Healthy);
 

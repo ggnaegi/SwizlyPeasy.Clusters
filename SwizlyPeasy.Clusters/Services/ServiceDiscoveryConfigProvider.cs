@@ -1,33 +1,32 @@
 ﻿using System.Diagnostics;
 using System.Reflection;
-using Microsoft.Extensions.Hosting;
 using Microsoft.Extensions.Options;
-using SwizlyPeasy.Common.Dtos;
+using SwizlyPeasy.Clusters.Dtos;
 using SwizlyPeasy.Common.Exceptions;
 using Yarp.ReverseProxy.Configuration;
 
 namespace SwizlyPeasy.Clusters.Services;
 
-public class InMemoryConfigProvider : IProxyConfigProvider, IHostedService, IDisposable
+public class ServiceDiscoveryConfigProvider : IProxyConfigProvider, IHostedService, IDisposable
 {
     private readonly IClusterConfigService _clusterConfigService;
 
     private readonly object _lockObject = new();
     private readonly IRoutesConfigService _routesConfigService;
-    private readonly IOptions<ServiceDiscoveryConfig> _serviceDiscoveryConfig;
+    private readonly IOptions<SwizlyPeasyConfig> _clusterConfig;
 
     // To detect redundant calls
     private bool _disposedValue;
     private volatile InMemoryConfig? _inMemoryConfig;
     private Timer? _timer;
 
-    public InMemoryConfigProvider(IClusterConfigService clusterConfigService, IRoutesConfigService routesConfigService,
-        IOptions<ServiceDiscoveryConfig> serviceDiscoveryConfig)
+    public ServiceDiscoveryConfigProvider(IClusterConfigService clusterConfigService,
+        IRoutesConfigService routesConfigService,
+        IOptions<SwizlyPeasyConfig> clusterConfig)
     {
         _clusterConfigService = clusterConfigService ?? throw new ArgumentNullException(nameof(clusterConfigService));
         _routesConfigService = routesConfigService ?? throw new ArgumentNullException(nameof(routesConfigService));
-        _serviceDiscoveryConfig =
-            serviceDiscoveryConfig ?? throw new ArgumentNullException(nameof(serviceDiscoveryConfig));
+        _clusterConfig = clusterConfig ?? throw new ArgumentNullException(nameof(clusterConfig));
     }
 
     public void Dispose()
@@ -46,7 +45,7 @@ public class InMemoryConfigProvider : IProxyConfigProvider, IHostedService, IDis
     public Task StartAsync(CancellationToken cancellationToken)
     {
         _timer = new Timer(UpdateConfig, null, TimeSpan.Zero,
-            TimeSpan.FromSeconds(_serviceDiscoveryConfig.Value.RefreshIntervalInSeconds));
+            TimeSpan.FromSeconds(_clusterConfig.Value.ServiceDiscovery.RefreshIntervalInSeconds));
         return Task.CompletedTask;
     }
 
@@ -58,9 +57,15 @@ public class InMemoryConfigProvider : IProxyConfigProvider, IHostedService, IDis
 
     public IProxyConfig GetConfig()
     {
-        if (_inMemoryConfig == null) UpdateConfig(null);
+        if (_inMemoryConfig == null)
+        {
+            UpdateConfig(null);
+        }
 
-        if (_inMemoryConfig == null) throw new InternalDomainException("IProxyConfig can't be null!", null);
+        if (_inMemoryConfig == null)
+        {
+            throw new InternalDomainException("IProxyConfig can't be null!", null);
+        }
 
         return _inMemoryConfig;
     }
@@ -79,14 +84,14 @@ public class InMemoryConfigProvider : IProxyConfigProvider, IHostedService, IDis
             {
                 var path = Path.Combine(
                     Path.GetDirectoryName(Assembly.GetExecutingAssembly().Location) ?? string.Empty,
-                    @"routes.config.json");
+                    _clusterConfig.Value.RouteConfigFilePath);
                 var currentConfig = File.ReadAllText(path);
                 Debug.Assert(currentConfig != null, nameof(currentConfig) + " != null");
-                _routesConfigService.LoadRoutes(_serviceDiscoveryConfig.Value.KeyValueStoreKey, currentConfig)
+                _routesConfigService.LoadRoutes(_clusterConfig.Value.ServiceDiscovery.KeyValueStoreKey, currentConfig)
                     .GetAwaiter().GetResult();
             }
 
-            var routes = _routesConfigService.GetRoutes(_serviceDiscoveryConfig.Value.KeyValueStoreKey).Result;
+            var routes = _routesConfigService.GetRoutes(_clusterConfig.Value.ServiceDiscovery.KeyValueStoreKey).Result;
             var clusters = _clusterConfigService.RetrieveClustersConfig().Result;
 
             var oldConfig = _inMemoryConfig;
@@ -98,8 +103,15 @@ public class InMemoryConfigProvider : IProxyConfigProvider, IHostedService, IDis
     // Protected implementation of Dispose pattern.
     protected virtual void Dispose(bool disposing)
     {
-        if (_disposedValue) return;
-        if (disposing) _timer?.Dispose();
+        if (_disposedValue)
+        {
+            return;
+        }
+
+        if (disposing)
+        {
+            _timer?.Dispose();
+        }
 
         _disposedValue = true;
     }

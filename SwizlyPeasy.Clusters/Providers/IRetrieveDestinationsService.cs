@@ -1,4 +1,6 @@
-﻿namespace SwizlyPeasy.Clusters.Providers;
+﻿using SwizlyPeasy.Clusters.Dtos;
+
+namespace SwizlyPeasy.Clusters.Providers;
 
 public interface IRetrieveDestinationsService
 {
@@ -8,5 +10,5 @@ public interface IRetrieveDestinationsService
     ///     This makes it easier to create the cluster part of the yarp configuration
     /// </summary>
     /// <returns></returns>
-    Task<Dictionary<string, IList<RegisteredDestination>>> RetrieveDestinations();
+    Task<IList<RegisteredDestinationsCollection>> RetrieveDestinations();
 }
