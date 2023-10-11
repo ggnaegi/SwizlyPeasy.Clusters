@@ -1,3 +1,4 @@
+using SwizlyPeasy.Clusters.Eureka.Extensions;
 using SwizlyPeasy.Common.Extensions;
 using SwizlyPeasy.Common.HealthChecks;
 using SwizlyPeasy.Consul.ServiceRegistration;
@@ -11,7 +12,16 @@ builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
 
 // swizly peasy consul & health checks
-builder.Services.RegisterServiceToSwizlyPeasyGateway(builder.Configuration);
+if (builder.Environment.EnvironmentName is "Development" or "Development2")
+{
+    builder.Services.RegisterServiceToSwizlyPeasyGateway(builder.Configuration);
+}
+else
+{
+    builder.Services.AddEurekaClient(builder.Configuration);
+    builder.Services.AddSwizlyPeasyHealthChecks(builder.Configuration);
+}
+
 
 var app = builder.Build();
 app.UseSwizlyPeasyExceptions();

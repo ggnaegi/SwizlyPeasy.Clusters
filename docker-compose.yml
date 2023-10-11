@@ -13,6 +13,11 @@ services:
         interval: 10s
         timeout: 5s
         retries: 5
+  eureka-server:
+    image:  springcloud/eureka
+    hostname: eureka-server
+    ports:
+        - "8761:8761"
   swizlypeasy.clusters.demo:
     image: ${DOCKER_REGISTRY-}swizlypeasyclustersdemo
     build:
@@ -42,6 +47,15 @@ services:
     build:
         context: .
         dockerfile: SwizlyPeasy.Clusters.Demo.Client/Dockerfile
+  swizlypeasy.clusters.demo.client3:
+    image: ${DOCKER_REGISTRY-}swizlypeasydemoapi
+    hostname: demo3
+    ports:
+        - "8006:80"
+        - "8007:443"
+    build:
+        context: .
+        dockerfile: SwizlyPeasy.Clusters.Demo.Client/Dockerfile 
     depends_on:
         consul-service:
          condition: service_healthy

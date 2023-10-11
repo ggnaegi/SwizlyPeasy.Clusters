@@ -23,3 +23,9 @@ services:
     ports:
       - "80"
       - "443"
+  swizlypeasy.clusters.demo.client3:
+    environment:
+      - ASPNETCORE_ENVIRONMENT=Development3
+    ports:
+      - "80"
+      - "443"
