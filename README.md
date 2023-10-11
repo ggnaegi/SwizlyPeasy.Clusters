@@ -1,5 +1,5 @@
 # SwizlyPeasy.Clusters
-Library for seamless integration of service discovery providers (Consul / Eureka) into yarp.
+Library for seamless integration of service discovery providers (Consul / Eureka and others...) into yarp.
 
 ## Introduction
 Yarp allows automated and transparent route and cluster configuration updates. This is something I've been able to verify in the SwizlyPeasy.Gateway project. So here I'm trying to generalize what has been implemented for consul in the SwizlyPeasy.Gateway project, so that other discovery providers can be used. 
