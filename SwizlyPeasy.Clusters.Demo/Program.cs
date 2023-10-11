@@ -3,6 +3,8 @@ using Microsoft.Extensions.DependencyInjection;
 using NLog;
 using NLog.Web;
 using SwizlyPeasy.Clusters.Consul.Provider;
+using SwizlyPeasy.Clusters.Eureka.Extensions;
+using SwizlyPeasy.Clusters.Eureka.Provider;
 using SwizlyPeasy.Clusters.Extensions;
 using SwizlyPeasy.Common.Extensions;
 using SwizlyPeasy.Common.Middlewares;
@@ -14,9 +16,20 @@ try
     builder.Services.AddHttpContextAccessor();
     builder.Services.AddControllers();
     builder.Services.AddHttpClient();
-    var reverseProxyBuilder = builder.Services
-        .AddReverseProxy()
-        .LoadFromServiceDiscoveryProvider<ConsulProvider>(builder.Configuration);
+    if (builder.Environment.EnvironmentName is "Development")
+    {
+        builder.Services
+            .AddReverseProxy()
+            .LoadFromServiceDiscoveryProvider<ConsulProvider>(builder.Configuration);
+    }
+    else
+    {
+        builder.Services.AddMemoryCache();
+        builder.Services.AddEurekaClient(builder.Configuration);
+        builder.Services
+            .AddReverseProxy()
+            .LoadFromServiceDiscoveryProvider<EurekaProvider>(builder.Configuration);
+    }
 
     builder.Host.UseNLog();
 

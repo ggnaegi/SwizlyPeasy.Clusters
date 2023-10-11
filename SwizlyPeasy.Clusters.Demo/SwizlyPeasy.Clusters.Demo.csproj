@@ -17,6 +17,7 @@
 
   <ItemGroup>
     <ProjectReference Include="..\SwizlyPeasy.Clusters.Consul\SwizlyPeasy.Clusters.Consul.csproj" />
+    <ProjectReference Include="..\SwizlyPeasy.Clusters.Eureka\SwizlyPeasy.Clusters.Eureka.csproj" />
     <ProjectReference Include="..\SwizlyPeasy.Clusters\SwizlyPeasy.Clusters.csproj" />
   </ItemGroup>
 
