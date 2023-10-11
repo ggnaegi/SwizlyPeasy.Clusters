@@ -11,3 +11,15 @@ services:
     volumes:
       - ${APPDATA}/Microsoft/UserSecrets:/root/.microsoft/usersecrets:ro
       - ${APPDATA}/ASP.NET/Https:/root/.aspnet/https:ro
+  swizlypeasy.clusters.demo.client1:
+    environment:
+      - ASPNETCORE_ENVIRONMENT=Development
+    ports:
+      - "80"
+      - "443"
+  swizlypeasy.clusters.demo.client2:
+    environment:
+      - ASPNETCORE_ENVIRONMENT=Development2
+    ports:
+      - "80"
+      - "443"

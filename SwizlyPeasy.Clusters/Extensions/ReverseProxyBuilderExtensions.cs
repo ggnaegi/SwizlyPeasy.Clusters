@@ -33,6 +33,7 @@ public static class ReverseProxyBuilderExtensions
             ctx => ctx.GetRequiredService<IServiceDiscoveryProviderClient>());
 
 
+        builder.Services.AddSingleton<IStatusService, StatusService>();
         builder.Services.AddSingleton<IClusterConfigService, ClusterConfigService>();
         builder.Services.AddSingleton<IRoutesConfigService, RoutesConfigService>();
         builder.Services.AddSingleton<ServiceDiscoveryConfigProvider>();

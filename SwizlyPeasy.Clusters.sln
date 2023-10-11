@@ -3,7 +3,7 @@ Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio Version 17
 VisualStudioVersion = 17.5.33627.172
 MinimumVisualStudioVersion = 10.0.40219.1
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SwizlyPeasy.Clusters", "SwizlyPeasy.Clusters\SwizlyPeasy.Clusters.csproj", "{605C6C8D-AEDA-4386-B7CA-FE2636948147}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "SwizlyPeasy.Clusters", "SwizlyPeasy.Clusters\SwizlyPeasy.Clusters.csproj", "{605C6C8D-AEDA-4386-B7CA-FE2636948147}"
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Solution Items", "Solution Items", "{4F724895-C58F-4E04-90DC-795E8FAEDC2A}"
 	ProjectSection(SolutionItems) = preProject
@@ -12,11 +12,13 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Solution Items", "Solution 
 		README.md = README.md
 	EndProjectSection
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SwizlyPeasy.Clusters.Consul", "SwizlyPeasy.Clusters.Consul\SwizlyPeasy.Clusters.Consul.csproj", "{D7B45047-DE66-42B5-8F84-6542BA2CE575}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "SwizlyPeasy.Clusters.Consul", "SwizlyPeasy.Clusters.Consul\SwizlyPeasy.Clusters.Consul.csproj", "{D7B45047-DE66-42B5-8F84-6542BA2CE575}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SwizlyPeasy.Clusters.Demo", "SwizlyPeasy.Clusters.Demo\SwizlyPeasy.Clusters.Demo.csproj", "{97672BE8-B05A-4ABA-836F-15FDF17E7F6D}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "SwizlyPeasy.Clusters.Demo", "SwizlyPeasy.Clusters.Demo\SwizlyPeasy.Clusters.Demo.csproj", "{97672BE8-B05A-4ABA-836F-15FDF17E7F6D}"
 EndProject
 Project("{E53339B2-1760-4266-BCC7-CA923CBCF16C}") = "docker-compose", "docker-compose.dcproj", "{14633407-53B9-4752-81B1-E9927CD21BF6}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SwizlyPeasy.Clusters.Demo.Client", "SwizlyPeasy.Clusters.Demo.Client\SwizlyPeasy.Clusters.Demo.Client.csproj", "{3A1EE8E7-47E0-4968-A164-A7F4980EC9B1}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -40,6 +42,10 @@ Global
 		{14633407-53B9-4752-81B1-E9927CD21BF6}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{14633407-53B9-4752-81B1-E9927CD21BF6}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{14633407-53B9-4752-81B1-E9927CD21BF6}.Release|Any CPU.Build.0 = Release|Any CPU
+		{3A1EE8E7-47E0-4968-A164-A7F4980EC9B1}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{3A1EE8E7-47E0-4968-A164-A7F4980EC9B1}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{3A1EE8E7-47E0-4968-A164-A7F4980EC9B1}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{3A1EE8E7-47E0-4968-A164-A7F4980EC9B1}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

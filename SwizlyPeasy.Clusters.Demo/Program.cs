@@ -12,6 +12,7 @@ try
 {
     var builder = WebApplication.CreateBuilder(args);
     builder.Services.AddHttpContextAccessor();
+    builder.Services.AddControllers();
     builder.Services.AddHttpClient();
     var reverseProxyBuilder = builder.Services
         .AddReverseProxy()
@@ -25,6 +26,7 @@ try
     app.UseMiddleware<ExceptionsHandlerMiddleware>();
     app.Use404AsException();
     app.UseRouting();
+    app.MapControllers();
     app.MapReverseProxy();
 
     app.Run();
